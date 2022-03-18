@@ -21,11 +21,9 @@ namespace WSVenta.Controllers
             oRespuesta.Exito = 0;
             try
             {
-                
-
-                using (VentaRealContext db = new VentaRealContext())
+                using (VentaRealContext db = new VentaRealContext())  //VentaRealContext es el objeto base de datos
                 {
-                    var lst = db.Clientes.ToList();
+                    var lst = db.Clientes.OrderByDescending(d=>d.Id).ToList();
                     oRespuesta.Exito = 1;
                     oRespuesta.Data = lst;
                 }
@@ -41,7 +39,7 @@ namespace WSVenta.Controllers
         }
 
         [HttpPost]
-        public IActionResult Add(ClienteRequest oModel)
+        public IActionResult Add(ClienteRequest oModel) //El parametro es lo que llega del frontend
         {
             Respuesta oRespuesta = new Respuesta();
             oRespuesta.Exito = 0;
@@ -51,7 +49,7 @@ namespace WSVenta.Controllers
                 using (VentaRealContext db = new VentaRealContext())
                 {
                     Cliente oCliente = new Cliente();
-                    oCliente.Nombre = oModel.Nombre;  //Mapea los campos del post(oModel) con los de la tabla(oCliente)
+                    oCliente.Nombre = oModel.Nombre;  //Mapea los campos del post(oModel) con los del objeto que envia a tabla(oCliente)
                     db.Clientes.Add(oCliente); //Agrega el campo a la base de datos a la espera de confirmacion
                     db.SaveChanges(); //Confirma los cambios
                 }
